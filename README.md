@@ -1,4 +1,4 @@
-ZendFramework demo Application
+demo Application of Zend Framework 2 
 =======================
 
 Introduction
