@@ -22,6 +22,28 @@ class AlbumController extends AbstractActionController{
             'albums' => $this->getAlbumTable()->fetchAll(),
         ));
     }
+    public function addAction()
+    {
+    	$form = new AlbumForm();
+    	$form->get('submit')->setValue('Add');
+    	
+    	$request = $this->getRequest();
+    	if($request->isPost()) {
+    		$album = new Album();
+    		$form->setInputFilter($album->getInputFilter());
+    		$form->setData($request->getPost());
+    		
+    		if($form->isValid()) {
+    			$album->exchangeArray($form->getData());
+    			$this->getAlbumTable()->saveAlbum($album);
+    			
+    			return $this->redirect()->toRoute('halbum');
+    		}
+    	}
+    	return array(
+    			'form' => $form,
+    	);
+    }
     public function editAction()
     {
     	$id = (int) $this->params()->fromRoute('id', 0);
@@ -42,7 +64,7 @@ class AlbumController extends AbstractActionController{
     	//var_dump($album);die;
     	$form  = new AlbumForm();
     	$form->bind($album);
-    	$form->get('submit')->setAttribute('value', 'Edit');
+    	$form->get('submit')->setAttribute('value', 'Save');
     	
     	$request = $this->getRequest();
     	if ($request->isPost()) {
@@ -62,13 +84,22 @@ class AlbumController extends AbstractActionController{
     			'form' => $form,
     	);
     }
-    public function addAction()
-    {
-    	echo __FUNCTION__;die;
-    }
     public function infoAction()
     {
-        echo __FUNCTION__;die;
+    	$id = $this->params()->fromRoute('id', 0);
+    	if(!$id) {
+    		return $this->redirect()->toRoute('halbum');
+    	}
+    	
+    	try {
+    		$album = $this->getAlbumTable()->getAlbum($id);
+    	} catch (\Exception $e) {
+    		$this->redirect()->toRoute('halbum');
+    	}
+    	
+        return array(
+        		'album' => $album,
+        );
     }
     public function deleteAction()
     {
