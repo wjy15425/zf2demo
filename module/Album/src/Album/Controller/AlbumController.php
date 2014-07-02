@@ -25,7 +25,7 @@ class AlbumController extends AbstractActionController{
     public function addAction()
     {
     	$form = new AlbumForm();
-    	$form->get('submit')->setValue('Add');
+    	$form->get('submit')->setValue($this->translate('Add'));
     	
     	$request = $this->getRequest();
     	if($request->isPost()) {
@@ -103,6 +103,11 @@ class AlbumController extends AbstractActionController{
     }
     public function deleteAction()
     {
-    	echo __FUNCTION__;die;
+    	$id = $this->params()->fromRoute('id');
+    	if($id) {
+    		$this->getAlbumTable()->deleteAlbum($id);
+    	}
+    	
+    	return $this->redirect()->toRoute('halbum');
     }
 }

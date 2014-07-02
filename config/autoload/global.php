@@ -26,6 +26,6 @@ return array(
         ),
     ),
 	'site_evn'=>array(
-			'topdomain' => 'zf215demo.com',
+			'topdomain' => 'wwww.zf2demo.com',
 	),	
 );

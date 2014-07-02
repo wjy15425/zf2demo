@@ -38,8 +38,11 @@ if ($zf2Path) {
         include $zf2Path . '/Zend/Loader/AutoloaderFactory.php';
         Zend\Loader\AutoloaderFactory::factory(array(
             'Zend\Loader\StandardAutoloader' => array(
-                'autoregister_zf' => true
-            )
+                'autoregister_zf' => true,
+            	'namespaces' => array(
+            		'Deven' => __DIR__ . '/vendor/ZF2EXT/Deven',
+            	),
+            ),
         ));
     }
 }

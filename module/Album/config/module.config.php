@@ -10,7 +10,7 @@ return array(
         	'halbum' => array(
         			'type' => 'Hostname',
         			'options' => array(
-        					'route' => 'album.zf215demo.com',
+        					'route' => 'album.zf2demo.com',
         					'constraints' => array(
         							//'subdomain' => '\d{3,6}',
         					),
