@@ -1,0 +1,69 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: checklist\n"
+"POT-Creation-Date: 2014-06-29 21:22+0800\n"
+"PO-Revision-Date: 2014-06-29 21:23+0800\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: zh\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 1.6.5\n"
+"X-Poedit-Basepath: .\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Poedit-SourceCharset: UTF-8\n"
+"X-Poedit-KeywordsList: translate\n"
+"X-Poedit-SearchPath-0: ..\n"
+
+#: ../language/other_form.php:7
+msgid "Title"
+msgstr "标题"
+
+#: ../language/other_form.php:8
+msgid "Add"
+msgstr "增加"
+
+#: ../language/other_form.php:9
+msgid "Save"
+msgstr "保存"
+
+#: ../view/checklist/task/add.phtml:2
+msgid "Add a new task"
+msgstr "新增任务"
+
+#: ../view/checklist/task/index.phtml:2
+msgid "My task list"
+msgstr "我的任务"
+
+#: ../view/checklist/task/index.phtml:7
+msgid "Add new item"
+msgstr "新增项"
+
+#: ../view/checklist/task/index.phtml:11
+msgid "Task"
+msgstr "任务"
+
+#: ../view/checklist/task/index.phtml:12
+msgid "Created"
+msgstr "创建时间"
+
+#: ../view/checklist/task/index.phtml:13
+msgid "Completed?"
+msgstr "是否完成"
+
+#: ../view/checklist/task/index.phtml:20
+msgid "yes"
+msgstr "是"
+
+#: ../view/checklist/task/index.phtml:20
+msgid "no"
+msgstr "否"
+
+#: ../view/checklist/task/index.phtml:22
+msgid "edit"
+msgstr "编辑"
+
+#: ../view/checklist/task/index.phtml:23
+msgid "delete"
+msgstr "删除"
