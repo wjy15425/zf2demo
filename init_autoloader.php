@@ -20,8 +20,8 @@
 if (file_exists('vendor/autoload.php')) {
     $loader = include 'vendor/autoload.php';
 }
-
-$zf2Path = 'E:/opensrc/ZendFramework-2.2.6/library';
+$zf2Path = 'E:/opensource/ZendFramework-2.2.5/library';
+//$zf2Path = 'E:/opensrc/ZendFramework-2.2.6/library';
 
 if (is_dir('vendor/ZF2/library')) {
     $zf2Path = 'vendor/ZF2/library';
