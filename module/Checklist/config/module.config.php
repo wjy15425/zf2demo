@@ -13,7 +13,7 @@ return array(
     ),
     'router' => array(
         'routes' =>    array(
-/*             'checklist' => array(
+            'checklist' => array(
                 'type'    => 'Literal',
                 'options' => array(
                     'route'    => '/task',
@@ -36,7 +36,7 @@ return array(
                         ),
                     ),
                 ),
-            ), */
+            ),
             'task' => array(
                 'type'    => 'Segment',
                 'options' => array(

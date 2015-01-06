@@ -1,0 +1,96 @@
+服务定位器模式(Service Locator Pattern)
+
+namespace Zend\ServiceManager;
+接口: ServiceLocatorInterface
+实现类: Zend\ServiceManager\ServiceManager implements ServiceLocatorInterface
+1.服务注册(对象object，数组) ServiceManager::setService 
+2.延迟加载服务(类class，ServiceManager::get时实例化) ServiceManager::setInvokableClass
+3.服务工厂(PHP callback, object implementing Zend\ServiceManger\FactoryInterface)
+class MyFactory implements FactoryInterface
+{
+    public function createService(ServiceLocatorInterface $serviceLocator)
+    {
+        return new \stdClass();
+    }
+}
+4.服务别名(服务) ServiceManager::setAlias 给服务命名其他别名
+5.抽象工厂 ServiceManager::addAbstractFactory 如果服务管理器无法根据请求名称找到服务就会检查注册的抽象工厂
+class MyAbstractFactory implements AbstractFactoryInterface
+interface AbstractFactoryInterface
+{
+    public function canCreateServiceWithName(ServiceLocatorInterface $serviceLocator, $name, $requestedName);
+    public function createServiceWithName(ServiceLocatorInterface $serviceLocator, $name, $requestedName);
+}
+6.初始化器(PHP callbacks or classes implementing Zend\ServiceManager\InitializerInterface) ServiceManager::initialize
+例如依赖注入，始终要调用一些初始化操作
+interface InitializerInterface
+{
+    public function initialize($instance, ServiceLocatorInterface $serviceLocator);
+}
+
+class MyInitializer implements InitializerInterface
+{
+    public function initialize($instance, ServiceLocatorInterface $serviceLocator)
+    {
+        if ($instance instanceof \stdClass) {
+            $instance->initialized = 'initialized!';
+        }
+    }
+}
+$serviceManager->addInitializer('MyInitializer');//设置初始化器
+$serviceManager->setInvokableClass('my-service', 'stdClass');
+$serviceManager->get('my-service')//获取服务my-service 调用初始化器做初始化操作
+    ->initialized;//服务my-service属性initialized已赋值
+
+
+ServiceManager 于MVC层以及其他组件中使用
+大多数情况，通过configuration或module classes提供services
+Zend\ModuleManager\Listener\ServiceListener 
+通常不与ServiceManager交互，仅提供services。应用程序依赖于ServiceManager配置，确保正确配置服务的依赖关系。
+ServiceLocatorAwareInterface to lazy-retrieve dependencies
+
+Module class 作为服务配置供应者需要实现Zend\ModuleManager\Feature\ServiceProviderInterface或getServiceConfig方法
+getServiceConfig方法必须返回:
+1.数组或Traversable object 键值包含abstract_factories、aliases、factories、invokables、services、shared
+2.实现了Zend\ServiceManager\ConfigInterface接口的类名字符串
+3.Zend\ServiceManager\Config实例或实现了Zend\ServiceManager\ConfigInterface接口的对象
+配置合并顺序： Module类getServiceConfig方法返回的，Module configuration under the service_manager key，
+Application configuration under the config/autoload/ directory 有多种方式重写服务管理器配置
+
+Zend\ServiceManager\ServiceLocatorAwareInterface
+public function setServiceLocator(ServiceLocatorInterface $serviceLocator);//Zend Framework MVC 注入 Zend\ServiceManager\ServiceManager
+public function getServiceLocator();
+
+
+delegators(Delegation pattern委托模式:Delegator[委托者]保存Delegate[受委托者]的实例引用，并转发相应的方法调用。相关模式：Decorator装饰者模式、Proxy代理模式)
+//Delegate
+class Buzzer
+{
+    public function buzz()
+    {
+        return 'Buzz!';
+    }
+}
+//Delegator
+class BuzzerDelegator extends Buzzer
+{
+    protected $realBuzzer;
+    protected $eventManager;
+
+    public function __construct(Buzzer $realBuzzer, EventManagerInterface $eventManager)
+    {
+        $this->realBuzzer   = $realBuzzer;//保存Delegate-Buzzer的实例引用
+        $this->eventManager = $eventManager;
+    }
+    //并转发方法调用 $this->realBuzzer->buzz()
+    public function buzz()
+    {
+        $this->eventManager->trigger('buzz', $this);
+
+        return $this->realBuzzer->buzz();
+    }
+}
+AOP(aspect-oriented programming 面向[方面|切面]编程)
+interface DelegatorFactoryInterface
+    public function createDelegatorWithName(ServiceLocatorInterface $serviceLocator, $name, $requestedName, $callback);
+

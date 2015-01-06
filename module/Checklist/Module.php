@@ -40,6 +40,12 @@ class Module
                     return $mapper;
                 },
             ),
+            'abstract_factories' => array(
+                
+            ),
+            'delegators' => array(
+                
+            ),
         );
     }
 }
