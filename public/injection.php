@@ -184,4 +184,6 @@ use Zend\Di\Definition\Builder;
             )
     );
 
-	var_dump($c);die;}
+	var_dump($c);die;
+*/
+}

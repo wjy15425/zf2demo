@@ -44,7 +44,10 @@ class Module
                 
             ),
             'delegators' => array(
-                
+                    'delegator_nam' => array(
+                            'delegator_factory1_name',
+                            'delegator_factory2_name'
+                    ),
             ),
         );
     }

@@ -120,6 +120,7 @@ class Buzzer
 }
 use Zend\EventManager\EventManagerInterface;
 
+/** 委托者类 */
 class BuzzerDelegator extends Buzzer
 {
     protected $realBuzzer;
@@ -140,8 +141,50 @@ $wrappedBuzzer = new Buzzer();
 $eventManager = new Zend\EventManager\EventManager();
 $eventManager->attach('buzz', function () { echo "start at the art!\n";});
 $buzzer = new BuzzerDelegator($wrappedBuzzer,$eventManager);
-echo '<br/>';
+echo '<br/><b>Delegator:</b><br/>';
 echo $buzzer->buzz();
+
+use Zend\ServiceManager\DelegatorFactoryInterface;
+use Zend\ServiceManager\ServiceLocatorInterface;
+/** 委托者工厂,生产委托者类 */
+class BuzzerDelegatorFactory implements DelegatorFactoryInterface
+{
+    public function createDelegatorWithName(ServiceLocatorInterface $serviceLocator, $name, $requestedName, $callback)
+    {
+        $realBuzzer = call_user_func($callback);
+        $eventManager = $serviceLocator->get('EventManager');
+        $eventManager->attach('buzz', function () { echo "Stare at the art!\n"; });
+        return new BuzzerDelegator($realBuzzer, $eventManager);
+    }
+}
+echo '<br/><b>DelegatorFactory:</b><br/>';
+$serviceManager = new Zend\ServiceManager\ServiceManager();
+$serviceManager->setInvokableClass('EventManager', 'Zend\EventManager\EventManager');
+$serviceManager->setInvokableClass('buzzer', 'Buzzer');//注册buzzer服务
+$serviceManager->setInvokableClass('buzzer-delegator-factory', 'BuzzerDelegatorFactory');//委托者工厂服务
+$serviceManager->addDelegator('buzzer', 'buzzer-delegator-factory');//用委托者工厂服务(buzzer-delegator-factory)处理buzzer服务
+// var_dump($serviceManager->getRegisteredServices());die;
+$buzzer = $serviceManager->get('buzzer');
+$buzzer->buzz();
+//通过配置来设置委托者工厂
+$config_arr = array(
+        'invokables' => array(
+                'EventManager' => 'Zend\EventManager\Eventmanager',
+                'buzzer'       => 'Buzzer',
+                'buzzer-delegator-factory' => 'BuzzerDelegatorFactory',
+        ),
+        'delegators' => array(
+                'buzzer' => array(
+                        'buzzer-delegator-factory',
+                )
+         ),
+);
+$config = new Zend\ServiceManager\Config($config_arr);
+$serviceManager = new Zend\ServiceManager\ServiceManager($config);
+$serviceManager->get('buzzer')->buzz();
+
+echo '<br/>============================================<br/>';
+
 
 
 //Lazy Services
@@ -163,17 +206,17 @@ $serviceManager = new Zend\ServiceManager\ServiceManager();
 $serviceManager->setService('Config', array(
     'lazy_services' => array(
         'class_map' => array(
-            'buzzer' => 'MyBuzzer',
+            'buzzer' => 'MyBuzzer',//延迟服务名、服务类名
         )
     ),
 ));
 $serviceManager->setInvokableClass('buzzer', 'Mybuzzer');
-$serviceManager->setFactory('LazyServiceFactory', 'Zend\ServiceManager\Proxy\LazyServiceFactoryFactory');
-$serviceManager->addDelegator('buzzer', 'LazyServiceFactory');
+$serviceManager->setFactory('LazyServiceFactory', 'Zend\ServiceManager\Proxy\LazyServiceFactoryFactory');//延迟委服务委托者工厂
+$serviceManager->addDelegator('buzzer', 'LazyServiceFactory');//用延迟委服务委托者工厂处理buzzer服务
 $buzzer = $serviceManager->get('buzzer');
 for ($i = 0; $i < 100; $i += 1) {
-    $buzzer = $serviceManager->create('buzzer');//未曾执行 MyBuzzer#__construct
+    $buzzer = $serviceManager->create('buzzer');//延迟服务，不会实例化MyBuzzer(MyBuzzer#__construct)
     echo "created buzzer $i\n";
 }
-echo $buzzer->buzz();
+echo $buzzer->buzz();//真正用到buzzer服务时方执行实例化(MyBuzzer#__construct)
 
