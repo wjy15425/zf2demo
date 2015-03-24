@@ -115,3 +115,8 @@ __get __set __isset __unset 魔术方法 对象属性获取|赋值|检查|删除
 themes\User\default\Member_card_consumption.html
 themes\User\default\Member_card_recharge.html
 app\Lib\Model\FinanceModel.class.php
+
+
+
+
+
