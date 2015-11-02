@@ -29,4 +29,4 @@ include '../vendor/autoload.php';
 // 2. Zend\ModuleManager\Listener\ModuleDependencyCheckerListener 检查module的所有依赖是否已加载。 getModuleDependencies
 // 3. Zend\ModuleManager\Listener\ConfigListener module配置合并到主应用配置 getConfig
 // 4. Zend\ModuleManager\Listener\InitTrigger zend\ModuleManager\ModuleManager作为基本参数 init($modelManager)
-// 与OnBootstrapListener相似，每个页面请求都调用到，只能用于执行轻量级任务，例如注册事件侦听器
+//    与OnBootstrapListener相似，每个页面请求都调用到，只能用于执行轻量级任务，例如注册事件侦听器

@@ -158,7 +158,7 @@ class BuzzerDelegatorFactory implements DelegatorFactoryInterface
     }
 }
 echo '<br/><b>DelegatorFactory:</b><br/>';
-$serviceManager = new Zend\ServiceManager\ServiceManager();
+$serviceManager = new \Zend\ServiceManager\ServiceManager();
 $serviceManager->setInvokableClass('EventManager', 'Zend\EventManager\EventManager');
 $serviceManager->setInvokableClass('buzzer', 'Buzzer');//注册buzzer服务
 $serviceManager->setInvokableClass('buzzer-delegator-factory', 'BuzzerDelegatorFactory');//委托者工厂服务
@@ -187,7 +187,7 @@ echo '<br/>============================================<br/>';
 
 
 
-//Lazy Services
+// Lazy Services
 class MyBuzzer
 {
     public function __construct()
