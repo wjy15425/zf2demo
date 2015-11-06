@@ -8,11 +8,9 @@ include '../vendor/autoload.php';
 
 $request = Request::fromString(<<<EOS
 POST http://localhost.com/test.php HTTP/1.1
-\r\n
 header1: header1_val
 header2: header1_val
-\r\n
-\r\n
+
 page=1&order=time
 EOS
 );
@@ -64,7 +62,7 @@ EOS
 var_dump($response->getBody(), $response->getContent());
 
 $headers = Headers::fromString(<<<EOS
-Host: baidu
+Host: http://baidu.com
 Content-Type: text/html
 Content-Length: 213
 EOS
